@@ -22,35 +22,35 @@
 
 
 PCF8574::PCF8574() {
-  if (TWCR == 0)
-  {
-    Wire.begin();
-  }
+  this->WireBegin();
 }
-
-
-/****************************************************************
- *
- * @Address_PCF8574				Direccion i2C de nuestro PCF8574.
- *
- ****************************************************************/
 PCF8574::PCF8574(int Address_PCF8574) {
-  SetAddress(Address_PCF8574);
-  if (TWCR == 0)
-  {
-    Wire.begin();
-  }
+  this->SetAddress(Address_PCF8574);
+  this->WireBegin();
+}
+PCF8574::PCF8574(int Address_PCF8574, int Address_Wire) {
+  this->SetAddress(Address_PCF8574);
+  this->SetAddressWire(Address_Wire);
+  this->WireBegin();
 }
 
 
+
+
+int PCF8574::GetAddressWire() {
+  return this->_DIRECCION_WIRE;
+}
+void PCF8574::SetAddressWire(int Channel) {
+  this->_DIRECCION_WIRE = Channel;
+}
 int PCF8574::GetAddress() {
-  return _DIRECCION_I2C;
+  return this->_DIRECCION_I2C;
 }
-
-
 void PCF8574::SetAddress(int Address_PCF8574) {
-  _DIRECCION_I2C = Address_PCF8574;
+  this->_DIRECCION_I2C = Address_PCF8574;
 }
+
+
 
 
 byte PCF8574::PotenciaDeDos(byte channel) {
@@ -67,17 +67,27 @@ byte PCF8574::PotenciaDeDos(byte channel) {
 }
 
 
+
+void PCF8574::WireBegin() {
+  if (TWCR == 0)
+  {
+	  if (this->GetAddressWire() < 0 ) {
+		  Wire.begin();
+	  }
+	  else {
+		  Wire.begin(this->GetAddressWire());
+	  }
+  }
+}
 byte PCF8574::WireReadValue() {
   byte value = 0;
-  Wire.requestFrom(GetAddress(), 1);
+  Wire.requestFrom(this->GetAddress(), 1);
   if (Wire.available())
   {
     value = Wire.read();
   }
   return value;
 }
-
-
 void PCF8574::WireWriteValue(byte value) {
   Wire.beginTransmission(GetAddress());
   Wire.write(value);
@@ -85,8 +95,10 @@ void PCF8574::WireWriteValue(byte value) {
 }
 
 
+
+
 void PCF8574::ResetPinStatus() {
-  SetPinStatus(0, false);
+  this->SetPinStatus(0, false);
 }
 
 
@@ -124,12 +136,12 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
     {
       if (channel == pin) {
         if (newstatus == false) {
-          value +=  PotenciaDeDos(channel);
+          value +=  this->PotenciaDeDos(channel);
         }
       }
       else {
-        if (ReadPinStatus(channel) == false) {
-          value +=  PotenciaDeDos(channel);
+        if (this->ReadPinStatus(channel) == false) {
+          value +=  this->PotenciaDeDos(channel);
         }
       }
     }
@@ -140,9 +152,9 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
 
 
 void PCF8574::DebugStatusPin(String &sreturn) {
-  for (int channel = 1; channel < 9; channel++)
+  for (int channel = 1; channel < PCF8574_MAX_CANALES + 1; channel++)
   {
-    sreturn = sreturn + ReadPinStatus(channel);
+    sreturn = sreturn + this->ReadPinStatus(channel);
   }
 }
 
@@ -154,7 +166,7 @@ bool PCF8574::ReadPinStatus(byte pin) {
   }
   
   byte value = WireReadValue();
-  if (isStatusPin(pin, value) == 1) {
+  if (this->isStatusPin(pin, value) == 1) {
     return true;
   }
   else {

@@ -26,29 +26,35 @@
 
 
 #define PCF8574_DIRECCION_I2C 	0x38
+#define PCF8574_DIRECCION_WIRE	-1
 #define PCF8574_MAX_CANALES 	8
 
 #define CANAL_STATUS_OFF		0
 #define CANAL_STATUS_ON			1
 
 
-
-
 class PCF8574
 {
   private:
     int _DIRECCION_I2C = PCF8574_DIRECCION_I2C;
+	int _DIRECCION_WIRE = PCF8574_DIRECCION_WIRE;
 
     byte PCF8574::PotenciaDeDos(byte channel);
+	
+	void PCF8574::WireBegin();
+	int  PCF8574::GetAddressWire();
+	void PCF8574::SetAddressWire(int Channel);	
     byte PCF8574::WireReadValue();
     void PCF8574::WireWriteValue(byte value);
+	
 
   public:
     PCF8574();
     PCF8574(int Address_PCF8574);
+	PCF8574(int Address_PCF8574, int Address_Wire);
 
     void PCF8574::ResetPinStatus();
-    bool PCF8574::SetPinStatus(byte pin, bool newstatus);
+    bool PCF8574::SetPinStatus(byte pin, byte newstatus);
     bool PCF8574::ReadPinStatus(byte pin);
     int  PCF8574::isStatusPin(byte pin, byte value);
     int  PCF8574::GetAddress();
