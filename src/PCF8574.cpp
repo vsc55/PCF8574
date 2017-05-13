@@ -44,12 +44,12 @@ PCF8574::PCF8574(int Address_PCF8574) {
 
 
 int PCF8574::GetAddress() {
-  return _DIRECCION_PCF8574_I2C;
+  return _DIRECCION_I2C;
 }
 
 
 void PCF8574::SetAddress(int Address_PCF8574) {
-  _DIRECCION_PCF8574_I2C = Address_PCF8574;
+  _DIRECCION_I2C = Address_PCF8574;
 }
 
 
