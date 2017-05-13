@@ -1,3 +1,23 @@
+//  Copyright (C) 2017 Javier Pastor
+//  http://www.cerebelum.net
+//
+// Este archivo forma parte de PCF8574.
+//
+// PCF8574 es software libre: se puede redistribuir y / o modificar
+// bajo los términos de la GNU Lesser General Public License como
+// publicado por la Free Software Foundation, ya sea la versión 3 de
+// la Licencia, o (a su elección) cualquier versión posterior.
+//
+// PCF8574 se distribuye con la esperanza de que sea útil,
+// pero SIN NINGUNA GARANTÍA; Sin la garantía implícita de
+// MERCANTIBILIDAD o ADECUACIÓN PARA UN PROPÓSITO PARTICULAR. Vea el
+// GNU Lesser General Public License para más detalles.
+//
+// Debería haber recibido una copia del Público General Menor de GNU
+// Licencia junto con PCF8574. Si no, vea
+// <http://www.gnu.org/licenses/>.
+//
+
 #include <PCF8574.h>
 
 #define I2C_DIRECCION_PCF8574_1 0x38
