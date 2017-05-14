@@ -29,7 +29,7 @@
    Si le pasamos la dirección se usará esa en el bus I2C.
 
    I2C_PCF8574(I2C_DIRECCION_PCF8574_1, Optional I2C_ADDRES_DEVICE);
-   
+
    Ejemplo:
       PCF8574 I2C_PCF8574(I2C_DIRECCION_PCF8574_1);
       PCF8574 I2C_PCF8574(I2C_DIRECCION_PCF8574_1, 0x11);
@@ -51,14 +51,14 @@ void setup() {
      Ponemos todos los canales en modo True.
      Nota: El canal numero 0 está reservado y se usa para referirse a todos los canales.
   */
-  I2C_PCF8574.SetPinStatus(0, CANAL_STATUS_ON);
+  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_ON);
 
 
   /*
      Ponemos los canales 1 y 6 en modo False.
   */
-  I2C_PCF8574.SetPinStatus(1, CANAL_STATUS_OFF);
-  I2C_PCF8574.SetPinStatus(6, CANAL_STATUS_OFF);
+  I2C_PCF8574.SetPinStatus(1, PIN_STATUS_OFF);
+  I2C_PCF8574.SetPinStatus(6, PIN_STATUS_OFF);
 
 
   /*
@@ -75,6 +75,14 @@ void setup() {
 
 
   /*
+     Configuramos el objeto para que solo se puedan modificar los pines del 2 al 5.
+     Leer el estado se podrá de todos, pero solo podremos actuar en la franja que configuremos.
+  */
+  I2C_PCF8574.SetIniPin(2);
+  I2C_PCF8574.SetEndPin(5);
+
+
+  /*
      Reseteamos todos los canales del PCF8574 que tenemos configurado ahora mismo.
   */
   I2C_PCF8574.ResetPinStatus();
@@ -82,9 +90,11 @@ void setup() {
 
   /*
      Obtenemos la dirección I2C que está configurada actualmente.
+     También obtenemos el Pin inicial y final que están configurados.
   */
   byte I2C_ADDRESS = I2C_PCF8574.GetAddress();
-
+  int  PIN_INI = I2C_PCF8574.GetIniPin();
+  int  PIN_END = I2C_PCF8574.GetEndPin();
 }
 
 void loop() {
