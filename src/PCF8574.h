@@ -25,50 +25,67 @@
 #include <Wire.h>
 
 
-#define PCF8574_DIRECCION_I2C 	0x38
-#define PCF8574_DIRECCION_WIRE	-1
+#define PCF8574_ADDRESS_I2C 	0x21		//PARA EL PCF8574A LA DIRECCION INICIAL ES 0x38
+#define PCF8574_DIFF_I2C_BY_A	0x17		//NUMERO DE DIRECCIONES ENTRE EL PCF8574 Y EL PCF8574A
+
+#define PCF8574_ADDRESS_WIRE	-1
+
 #define PCF8574_MAX_PIN 		8
 #define PCF8574_INI_PIN			1
+#define PCF8574_INT_PIN			-1			//PIN DE ARDUINO QUE SE USARA PARA CONTROLAR EL ESTADO INT
 
 #define PIN_STATUS_OFF			0
 #define PIN_STATUS_ON			1
+#define PIN_STATUS_ERR			2
 
 
 class PCF8574
 {
   private:
-    int _DIRECCION_I2C = PCF8574_DIRECCION_I2C;
-	int _DIRECCION_WIRE = PCF8574_DIRECCION_WIRE;
-	int _PIN_INI = PCF8574_INI_PIN;
-	int _PIN_END = PCF8574_MAX_PIN;
-
+    bool _BEING_WIRE = false;
+    int  _ADDRESS_I2C;
+	int  _ADDRESS_WIRE;
+	int  _PIN_INI;
+	int  _PIN_END;
+	int  _PIN_INT = PCF8574_INT_PIN;
+	
+	volatile int _PinMode;
+	
+	bool PCF8574::IsPowerOfTwo (long x);
     byte PCF8574::PotenciaDeDos(byte pin);
 	
+	bool PCF8574::WireIsBegin();
 	void PCF8574::WireBegin();
-	int  PCF8574::GetAddressWire();
-	void PCF8574::SetAddressWire(int Address_Wire);	
     byte PCF8574::WireReadValue();
     void PCF8574::WireWriteValue(byte value);
 	
 
   public:
     PCF8574();
-    PCF8574(int Address_PCF8574);
-	PCF8574(int Address_PCF8574, int Address_Wire);
-	PCF8574(int Address_PCF8574, int Address_Wire, int PinIni, int PinEnd);
+	PCF8574(int PinIni, int PinEnd);
 
+	void PCF8574::begin(int Address_PCF8574);
+	
+	int  PCF8574::GetAddressWire();
+	void PCF8574::SetAddressWire(int Address_Wire);	
+	
+	void PCF8574::pinMode(int pin, int mode);
+	int  PCF8574::pinMode(int pin);
+	
     void PCF8574::ResetPinStatus();
     bool PCF8574::SetPinStatus(byte pin, byte newstatus);
-    bool PCF8574::ReadPinStatus(byte pin);
+    int  PCF8574::ReadPinStatus(byte pin);
     int  PCF8574::isStatusPin(byte pin, byte value);
-    int  PCF8574::GetAddress();
-    void PCF8574::SetAddress(int Address_PCF8574);
     void PCF8574::DebugStatusPin(String &sreturn);
 	
+	int  PCF8574::GetAddress();
+    void PCF8574::SetAddress(int Address_PCF8574);
+    
 	int  PCF8574::GetIniPin();
 	bool PCF8574::SetIniPin(int pin);
 	int  PCF8574::GetEndPin();
 	bool PCF8574::SetEndPin(int pin);
+	bool PCF8574::SetPins(int pinIni, int pinEnd);
 };
 
 #endif
