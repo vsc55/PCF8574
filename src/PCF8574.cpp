@@ -273,7 +273,7 @@ int PCF8574::ReadPinStatus(byte pin) {
   }
 }
 
-//TODO: PENDIENTE DEPURAR.
+
 int PCF8574::isStatusPin(byte pin, byte value) {
   if ((pin > PCF8574_MAX_PIN) || (pin < 0)) {
     return -1;
@@ -282,71 +282,4 @@ int PCF8574::isStatusPin(byte pin, byte value) {
   //value = 0;      //TODO ENCENDIDO
   value = 255 - value;
   return (value >> (pin -1)) & 0x1;
-	
-/*
-  int pin1 = 1;
-  int pin2 = 1;
-  int pin3 = 1;
-  int pin4 = 1;
-  int pin5 = 1;
-  int pin6 = 1;
-  int pin7 = 1;
-  int pin8 = 1;
-
-  if (value >= 128 ) {
-    pin8 = 0;
-    value -= 128;
-  }
-  if (value >= 64 ) {
-    pin7 = 0;
-    value -= 64;
-  }
-  if (value >= 32 ) {
-    pin6 = 0;
-    value -= 32;
-  }
-  if (value >= 16 ) {
-    pin5 = 0;
-    value -= 16;
-  }
-  if (value >= 8 ) {
-    pin4 = 0;
-    value -= 8;
-  }
-  if (value >= 4 ) {
-    pin3 = 0;
-    value -= 4;
-  }
-  if (value >= 2 ) {
-    pin2 = 0;
-    value -= 2;
-  }
-  if (value >= 1 ) {
-    pin1 = 0;
-    value -= 1;
-  }
-
-  switch ( pin )
-  {
-    case 1:
-      return pin1;
-    case 2:
-      return pin2;
-    case 3:
-      return pin3;
-    case 4:
-      return pin4;
-    case 5:
-      return pin5;
-    case 6:
-      return pin6;
-    case 7:
-      return pin7;
-    case 8:
-      return pin8;
-
-    default:
-      return -1;
-  }
-  */
 }
