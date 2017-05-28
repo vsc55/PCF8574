@@ -29,8 +29,7 @@
 
 #define PCF8574_ADDRESS_WIRE	-1
 
-#define PCF8574_MAX_PIN 		8
-#define PCF8574_INI_PIN			1
+#define PCF8574_MAX_PIN			8
 #define PCF8574_INT_PIN			-1			//PIN DE ARDUINO QUE SE USARA PARA CONTROLAR EL ESTADO INT
 
 #define PIN_STATUS_OFF			0
@@ -44,8 +43,6 @@ class PCF8574
     bool _BEING_WIRE = false;
     int  _ADDRESS_I2C;
 	int  _ADDRESS_WIRE;
-	int  _PIN_INI;
-	int  _PIN_END;
 	int  _PIN_INT = PCF8574_INT_PIN;
 	
 	volatile int _PinMode;
@@ -61,8 +58,9 @@ class PCF8574
 
   public:
     PCF8574();
-	PCF8574(int PinIni, int PinEnd);
+	PCF8574(int Address_PCF8574);
 
+	void PCF8574::begin();
 	void PCF8574::begin(int Address_PCF8574);
 	
 	int  PCF8574::GetAddressWire();
@@ -70,6 +68,7 @@ class PCF8574
 	
 	void PCF8574::pinMode(int pin, int mode);
 	int  PCF8574::pinMode(int pin);
+	bool PCF8574::isPinValid(int pin);
 	
     void PCF8574::ResetPinStatus();
     bool PCF8574::SetPinStatus(byte pin, byte newstatus);
@@ -79,12 +78,6 @@ class PCF8574
 	
 	int  PCF8574::GetAddress();
     void PCF8574::SetAddress(int Address_PCF8574);
-    
-	int  PCF8574::GetIniPin();
-	bool PCF8574::SetIniPin(int pin);
-	int  PCF8574::GetEndPin();
-	bool PCF8574::SetEndPin(int pin);
-	bool PCF8574::SetPins(int pinIni, int pinEnd);
 };
 
 #endif

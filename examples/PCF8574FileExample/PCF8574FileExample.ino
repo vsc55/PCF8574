@@ -26,11 +26,11 @@
 
 /*
    Crear objeto, por defecto se configurar el bus I2C en modo master.
-   Opcional: Podemos pasarle el intervalo de pines que vamos a usar.
+   Opcional: Podemos pasarle la dirección I2C del módulo PCF8574 que vamos a usar.
 
    Ejemplo:
       PCF8574 I2C_PCF8574;
-      PCF8574 I2C_PCF8574(1, 8);
+      PCF8574 I2C_PCF8574(0x21);
 */
 PCF8574 I2C_PCF8574;           //MASTER
 
@@ -40,7 +40,7 @@ void setup() {
 
 
   /*
-     Iniciamos el objeto y configuramos la dirección I2C del PCF8574.
+     Iniciamos el objeto y configuramos la dirección I2C del PCF8574, podemos dejarlo en blanco si ya lo hemos configurado al crear el objeto, por ejemplo.
      NOTA: Si vamos a usar el bus I2C en modo esclavo tendremos que configura la dirección Wire antes de ejecutar Begin().
      NOTA: Si se ha ejecutado antes en algún sitio Wire.Begin(), se usarán los datos que se hayan ejecutando antes, y la dirección Wire que tengamos configurado en el objeto no tendrá efecto.
   */
@@ -48,14 +48,9 @@ void setup() {
 
 
   /*
-     Configuramos que pines del PCF8574 vamos a usar. En este caso del pin 1 al 8.
-  */
-  I2C_PCF8574.SetPins(1, 8);
-
-
-  /*
      Configuramos todos los pines en modo OUT excepto el 8 en modo IN.
      NOTE: Todos los pines por defecto están configurados en modo IN.
+     NOTA: Podemos configura todos los pines uno a uno como se ve en código siguiente o usar el pin número 0 que actuara sobre todos los pines.
   */
   I2C_PCF8574.pinMode(1, OUTPUT);
   I2C_PCF8574.pinMode(2, OUTPUT);
@@ -104,33 +99,23 @@ void setup() {
 
 
   /*
-     Configuramos que pines del PCF8574 vamos a usar. En este caso del pin 1 al 8.
-     Al principio del código configuramos los pines de entrada y salida en un solo comando, pero podemos modificar únicamente el pin inicial o final cuando lo queramos.
-     Ahora configuramos el pin numero 2 como inicial y el 5 como el final, con lo que actuaremos solo en los pines 2,3,4,5.
-     NOTA: Leer el estado de cualquier pin siempre es posible, da igual el intervalo de pines configurados. Pero solo podremos actuar en la franja de pines que tengamos configurados.
-     NOTA: Tener en cuenta que si cambiamos el intervalo de pines la configuración de pinMode no se verá afectada, y seguirán configurados en el estado anterior.
-  */
-  I2C_PCF8574.SetIniPin(2);
-  I2C_PCF8574.SetEndPin(5);
-
-
-  /*
-     Reseteamos todos los pines del PCF8574 que tenemos configurado ahora mismo.
-     Solo afectara a la franja de pines que hemos configurado antes del 2 al 5.
-  */
-  I2C_PCF8574.ResetPinStatus();
-
-
-  /*
      Obtenemos la dirección I2C que está configurada actualmente.
      También obtenemos el Pin inicial y final que están configurados.
   */
   byte I2C_ADDRESS = I2C_PCF8574.GetAddress();
-  int  PIN_INI = I2C_PCF8574.GetIniPin();
-  int  PIN_END = I2C_PCF8574.GetEndPin();
 }
 
 void loop() {
-
-
+  /*
+     Bucle que ira encendiendo todos los pines y apagándolos excepto el 8 que está en modo INPUT.
+  */
+  for (int ii = 1; ii <= 8; ii++) {
+    Serial.print("PIN "); Serial.print(ii); Serial.print(" > ON >");
+    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_ON);
+    delay(500);
+    Serial.println("OFF");
+    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_OFF);
+    delay(1000);
+  }
+  delay(5000);
 }
