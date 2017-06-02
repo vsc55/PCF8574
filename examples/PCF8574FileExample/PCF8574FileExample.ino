@@ -72,15 +72,15 @@ void setup() {
      Ponemos todos los pines (que están configurados en modo OUT) en modo True.
      Nota: El pin numero 0 está reservado y se usa para referirse a todos los pines (que están configurados en modo OUT).
   */
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_ON);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_ON);
 
 
   /*
      Ponemos los pines 1 y 6 en modo False. Se intenta también con el 8 pero al estar en modo IN no pasa nada.
   */
-  I2C_PCF8574.SetPinStatus(1, PIN_STATUS_OFF);
-  I2C_PCF8574.SetPinStatus(6, PIN_STATUS_OFF);
-  I2C_PCF8574.SetPinStatus(8, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(1, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(6, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(8, PIN_STATUS_OFF);
 
 
   /*
@@ -111,10 +111,10 @@ void loop() {
   */
   for (int ii = 1; ii <= 8; ii++) {
     Serial.print("PIN "); Serial.print(ii); Serial.print(" > ON >");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_ON);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
     delay(500);
     Serial.println("OFF");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_OFF);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_OFF);
     delay(1000);
   }
   delay(5000);

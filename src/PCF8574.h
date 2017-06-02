@@ -71,7 +71,7 @@ class PCF8574
 	bool PCF8574::isPinValid(int pin);
 	
     void PCF8574::ResetPinStatus();
-    bool PCF8574::SetPinStatus(byte pin, byte newstatus);
+    bool PCF8574::digitalWrite(byte pin, byte newstatus);
     int  PCF8574::digitalRead(byte pin);
     int  PCF8574::isStatusPin(byte pin, byte value);
 	

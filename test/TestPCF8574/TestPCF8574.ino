@@ -23,10 +23,10 @@ void loop() {
 
 
   Serial.print("TODO >> ON >> ");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_ON);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_ON);
   delay(2000);
   Serial.println("OFF");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_OFF);
   delay(2000);
 
 
@@ -36,10 +36,10 @@ void loop() {
 
   Serial.println("TODO EXCEPTO 2,3,4");
   Serial.print("TODO >> ON >> ");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_ON);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_ON);
   delay(2000);
   Serial.println("OFF");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_OFF);
   delay(2000);
 
 
@@ -54,10 +54,10 @@ void loop() {
 
   Serial.println("TODO EXCEPTO 5,6");
   Serial.print("TODO >> ON >> ");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_ON);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_ON);
   delay(2000);
   Serial.println("OFF");
-  I2C_PCF8574.SetPinStatus(0, PIN_STATUS_OFF);
+  I2C_PCF8574.digitalWrite(0, PIN_STATUS_OFF);
   delay(2000);
 
 
@@ -66,7 +66,7 @@ void loop() {
   for (int ii = 1; ii <= 8; ii++) {
     Serial.print("PIN "); Serial.println(ii); 
     Serial.println("   > ON");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_ON);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
 
     I2C_PCF8574.DebugStatusPin(vreturn);
     Serial.print("    > ON DATOS: "); Serial.println(vreturn);
@@ -74,7 +74,7 @@ void loop() {
 
     delay(500);
     Serial.println("    > OFF");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_OFF);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_OFF);
 
 
     I2C_PCF8574.DebugStatusPin(vreturn);
@@ -94,14 +94,14 @@ void loop() {
     for (int ii = 1; ii <= 8; ii++) {
     Serial.print("PIN "); Serial.println(ii); 
     Serial.println("    > ON");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_ON);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
 
     char* creturn = I2C_PCF8574.DebugStatusPin();
     Serial.print("    > ON DATOS: "); Serial.println(creturn[0], BIN);
 
     delay(500);
     Serial.println("    > OFF");
-    I2C_PCF8574.SetPinStatus(ii, PIN_STATUS_OFF);
+    I2C_PCF8574.digitalWrite(ii, PIN_STATUS_OFF);
 
     creturn = I2C_PCF8574.DebugStatusPin();
     Serial.print("    > ON DATOS: "); Serial.println(creturn[0], BIN);

@@ -171,10 +171,10 @@ int  PCF8574::pinMode(int pin) {
 
 
 void PCF8574::ResetPinStatus() {
-  this->SetPinStatus(0, false);
+  this->digitalWrite(0, false);
 }
 
-boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
+boolean PCF8574::digitalWrite(byte pin, byte newstatus) {
   if (this->isPinValid(pin) == false) {
     return false;
   }
@@ -183,7 +183,7 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
   if (pin == 0) {
 	value = 0;        //TODO ENCENDIDO
 	for (byte i = 1; i <= PCF8574_MAX_PIN; i++) {
-	  this->SetPinStatus(i,newstatus);
+	  this->digitalWrite(i,newstatus);
 	}
 	return true;
   }
