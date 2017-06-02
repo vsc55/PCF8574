@@ -192,7 +192,7 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
 		return false;
 	}  
     //COMPROBAMOS EL ESTADO DEL PIN
-    int StatusPinActual = ReadPinStatus(pin);
+    int StatusPinActual = this->digitalRead(pin);
     if (newstatus == PIN_STATUS_ON) {
       if (StatusPinActual == PIN_STATUS_ON) {
         //SI NUEVO STATUS ES TRUE Y YA ESTA COMO TRUE NO HACEMOS CAMBIO
@@ -215,7 +215,7 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
         }
       }
 	  else {
-        if (this->ReadPinStatus(ipin) == PIN_STATUS_ON) {
+        if (this->digitalRead(ipin) == PIN_STATUS_ON) {
           continue;
         }
 	  }
@@ -227,15 +227,7 @@ boolean PCF8574::SetPinStatus(byte pin, byte newstatus) {
   return true;
 }
 
-
-void PCF8574::DebugStatusPin(String &sreturn) {
-  for (int pin = 1; pin <= PCF8574_MAX_PIN; pin++)
-  {
-    sreturn = sreturn + this->ReadPinStatus(pin);
-  }
-}
-
-int PCF8574::ReadPinStatus(byte pin) {
+int PCF8574::digitalRead(byte pin) {
   if (this->isPinValid(pin) == false) {
     return PIN_STATUS_ERR;
   }
@@ -255,4 +247,25 @@ int PCF8574::isStatusPin(byte pin, byte value) {
   //value = 0;      //TODO ENCENDIDO
   value = 255 - value;
   return (value >> (pin -1)) & 0x1;
+}
+
+
+
+
+
+//TODO: PENDIENTE DEPURAR.
+void PCF8574::DebugStatusPin(String &sreturn) {
+  for (int pin = 1; pin <= PCF8574_MAX_PIN; pin++)
+  {
+    sreturn = sreturn + this->digitalRead(pin);
+  }
+}
+
+char* PCF8574::DebugStatusPin(){
+    char* str;
+	for (int i = 0; i < PCF8574_MAX_PIN; i++)
+	{
+		str[i] = this->digitalRead(i + 1);
+	}
+    return str;
 }

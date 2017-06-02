@@ -72,12 +72,14 @@ class PCF8574
 	
     void PCF8574::ResetPinStatus();
     bool PCF8574::SetPinStatus(byte pin, byte newstatus);
-    int  PCF8574::ReadPinStatus(byte pin);
+    int  PCF8574::digitalRead(byte pin);
     int  PCF8574::isStatusPin(byte pin, byte value);
-    void PCF8574::DebugStatusPin(String &sreturn);
 	
 	int  PCF8574::GetAddress();
     void PCF8574::SetAddress(int Address_PCF8574);
+	
+	void  PCF8574::DebugStatusPin(String &sreturn);
+	char* PCF8574::DebugStatusPin();
 };
 
 #endif

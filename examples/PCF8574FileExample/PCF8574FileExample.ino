@@ -87,9 +87,9 @@ void setup() {
      Siempre se podrá leer el estado de un pin da igual si está configurado en modo IN o OUT.
      PIN_STATUS_OFF = 0, PIN_STATUS_ON = 1, PIN_STATUS_ERR = 2
   */
-  int Status_Pin5 = I2C_PCF8574.ReadPinStatus(5);
-  int Status_Pin6 = I2C_PCF8574.ReadPinStatus(6);
-  int Status_Pin8 = I2C_PCF8574.ReadPinStatus(8);
+  int Status_Pin5 = I2C_PCF8574.digitalRead(5);
+  int Status_Pin6 = I2C_PCF8574.digitalRead(6);
+  int Status_Pin8 = I2C_PCF8574.digitalRead(8);
 
 
   /*
