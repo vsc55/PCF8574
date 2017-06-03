@@ -24,14 +24,14 @@
 PCF8574::PCF8574() {
   this->_PinMode = 0;
   
-  this->SetAddress(PCF8574_ADDRESS_I2C);
-  this->SetAddressWire(PCF8574_ADDRESS_WIRE);
+  this->AddressI2C(PCF8574_ADDRESS_I2C);
+  this->AddressWire(PCF8574_ADDRESS_WIRE);
 }
 PCF8574::PCF8574(int Address_PCF8574) {
   this->_PinMode = 0;
   
-  this->SetAddress(Address_PCF8574);
-  this->SetAddressWire(PCF8574_ADDRESS_WIRE);
+  this->AddressI2C(Address_PCF8574);
+  this->AddressWire(PCF8574_ADDRESS_WIRE);
 }
 
 
@@ -41,33 +41,30 @@ void PCF8574::begin() {
 	this->WireBegin();
 }
 void PCF8574::begin(int Address_PCF8574) {
-	this->SetAddress(Address_PCF8574);
+	this->AddressI2C(Address_PCF8574);
 	this->WireBegin();
 }
 
 
 
 
-int  PCF8574::GetAddressWire() {
+int PCF8574::AddressWire() {
   return this->_ADDRESS_WIRE;
 }
-void PCF8574::SetAddressWire(int Address_Wire) {
+void PCF8574::AddressWire(int Address_Wire) {
   this->_ADDRESS_WIRE = Address_Wire;
 }
-int  PCF8574::GetAddress() {
+int PCF8574::AddressI2C() {
   return this->_ADDRESS_I2C;
 }
-void PCF8574::SetAddress(int Address_PCF8574) {
+void PCF8574::AddressI2C(int Address_PCF8574) {
   this->_ADDRESS_I2C = Address_PCF8574;
 }
 
 
 
 
-bool PCF8574::IsPowerOfTwo (long x) {
-  return (x > 0) && (x & (x-1) == 0);
-}
-byte PCF8574::PotenciaDeDos(byte pin) {
+uint8_t PCF8574::PotenciaDeDos(byte pin) {
   switch ( pin )
   {
     case 1:
@@ -89,7 +86,7 @@ byte PCF8574::PotenciaDeDos(byte pin) {
 	
     default:
       //le tenemos que sumar uno por que al pasar el float a int redondea a la baja.
-      return int (pow (2, pin - 1)) + 1 ;
+      return 0; //byte (pow (2, pin - 1)) + 1 ;
   }
 }
 
@@ -104,22 +101,22 @@ void PCF8574::WireBegin() {
   if (this->_BEING_WIRE == false) {
     if (this->WireIsBegin() == false)
 	{
-	  if (this->GetAddressWire() < 0 ) {
+	  if (this->AddressWire() < 0 ) {
 	    Wire.begin();
 	  }
 	  else {
-	    Wire.begin(this->GetAddressWire());
+	    Wire.begin(this->AddressWire());
 	  }
 	  this->_BEING_WIRE = true;
 	}
 	else {
-	  this->SetAddressWire(-2);
+	  this->AddressWire(-2);
 	}
   }
 }
-byte PCF8574::WireReadValue() {
+uint8_t PCF8574::WireReadValue() {
   byte value = 0;
-  Wire.requestFrom(this->GetAddress(), 1);
+  Wire.requestFrom(this->AddressI2C(), 1);
   if (Wire.available())
   {
     value = Wire.read();
@@ -127,7 +124,7 @@ byte PCF8574::WireReadValue() {
   return value;
 }
 void PCF8574::WireWriteValue(byte value) {
-  Wire.beginTransmission(GetAddress());
+  Wire.beginTransmission(AddressI2C());
   Wire.write(value);
   Wire.endTransmission();
 }
@@ -135,13 +132,13 @@ void PCF8574::WireWriteValue(byte value) {
 
 
 
-bool PCF8574::isPinValid(int pin) {
+bool PCF8574::isPinValid(byte pin) {
   if ((pin > PCF8574_MAX_PIN) || (pin < 0)) {
     return false;
   }
   return true;
 }
-void PCF8574::pinMode(int pin, int mode) {
+void PCF8574::pinMode(byte pin, byte mode) {
   if (this->isPinValid(pin) == true) {
     if (pin == 0) {
 	  for (byte i = 1; i <= PCF8574_MAX_PIN; i++) {
@@ -162,7 +159,7 @@ void PCF8574::pinMode(int pin, int mode) {
     }
   }
 }
-int  PCF8574::pinMode(int pin) {
+uint8_t PCF8574::pinMode(byte pin) {
 	return (this->_PinMode >> (pin-1)) & 0x1;
 }
 
@@ -192,7 +189,7 @@ boolean PCF8574::digitalWrite(byte pin, byte newstatus) {
 		return false;
 	}  
     //COMPROBAMOS EL ESTADO DEL PIN
-    int StatusPinActual = this->digitalRead(pin);
+    byte StatusPinActual = this->digitalRead(pin);
     if (newstatus == PIN_STATUS_ON) {
       if (StatusPinActual == PIN_STATUS_ON) {
         //SI NUEVO STATUS ES TRUE Y YA ESTA COMO TRUE NO HACEMOS CAMBIO
@@ -223,11 +220,11 @@ boolean PCF8574::digitalWrite(byte pin, byte newstatus) {
     }
   }
 
-  WireWriteValue(value);		//ENVIA EL NUEVO CODIGO
+  this->WireWriteValue(value);		//ENVIA EL NUEVO CODIGO
   return true;
 }
 
-int PCF8574::digitalRead(byte pin) {
+uint8_t PCF8574::digitalRead(byte pin) {
   if (this->isPinValid(pin) == false) {
     return PIN_STATUS_ERR;
   }
@@ -239,7 +236,7 @@ int PCF8574::digitalRead(byte pin) {
   }
 }
 
-int PCF8574::isStatusPin(byte pin, byte value) {
+uint8_t PCF8574::isStatusPin(byte pin, byte value) {
   if (this->isPinValid(pin) == false) {
     return -1;
   }
@@ -255,7 +252,7 @@ int PCF8574::isStatusPin(byte pin, byte value) {
 
 //TODO: PENDIENTE DEPURAR.
 void PCF8574::DebugStatusPin(String &sreturn) {
-  for (int pin = 1; pin <= PCF8574_MAX_PIN; pin++)
+  for (byte pin = 1; pin <= PCF8574_MAX_PIN; pin++)
   {
     sreturn = sreturn + this->digitalRead(pin);
   }
@@ -263,7 +260,7 @@ void PCF8574::DebugStatusPin(String &sreturn) {
 
 char* PCF8574::DebugStatusPin(){
     char* str;
-	for (int i = 0; i < PCF8574_MAX_PIN; i++)
+	for (byte i = 0; i < PCF8574_MAX_PIN; i++)
 	{
 		str[i] = this->digitalRead(i + 1);
 	}

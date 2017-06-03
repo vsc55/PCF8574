@@ -87,29 +87,29 @@ void setup() {
      Siempre se podrá leer el estado de un pin da igual si está configurado en modo IN o OUT.
      PIN_STATUS_OFF = 0, PIN_STATUS_ON = 1, PIN_STATUS_ERR = 2
   */
-  int Status_Pin5 = I2C_PCF8574.digitalRead(5);
-  int Status_Pin6 = I2C_PCF8574.digitalRead(6);
-  int Status_Pin8 = I2C_PCF8574.digitalRead(8);
+  byte Status_Pin5 = I2C_PCF8574.digitalRead(5);
+  byte Status_Pin6 = I2C_PCF8574.digitalRead(6);
+  byte Status_Pin8 = I2C_PCF8574.digitalRead(8);
 
 
   /*
      Cambiamos la dirección I2C para poder controlar otro PCF8574.
   */
-  I2C_PCF8574.SetAddress(I2C_DIRECCION_PCF8574_2);
+  I2C_PCF8574.AddressI2C(I2C_DIRECCION_PCF8574_2);
 
 
   /*
      Obtenemos la dirección I2C que está configurada actualmente.
      También obtenemos el Pin inicial y final que están configurados.
   */
-  byte I2C_ADDRESS = I2C_PCF8574.GetAddress();
+  int I2C_ADDRESS = I2C_PCF8574.AddressI2C();
 }
 
 void loop() {
   /*
      Bucle que ira encendiendo todos los pines y apagándolos excepto el 8 que está en modo INPUT.
   */
-  for (int ii = 1; ii <= 8; ii++) {
+  for (byte ii = 1; ii <= 8; ii++) {
     Serial.print("PIN "); Serial.print(ii); Serial.print(" > ON >");
     I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
     delay(500);
@@ -117,5 +117,7 @@ void loop() {
     I2C_PCF8574.digitalWrite(ii, PIN_STATUS_OFF);
     delay(1000);
   }
+
+  I2C_PCF8574.pinMode(8, OUTPUT);
   delay(5000);
 }

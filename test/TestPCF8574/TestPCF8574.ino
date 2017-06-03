@@ -63,8 +63,9 @@ void loop() {
 
 
   String vreturn;
-  for (int ii = 1; ii <= 8; ii++) {
-    Serial.print("PIN "); Serial.println(ii); 
+  byte ii = 0;
+  for (ii = 1; ii <= 8; ii++) {
+    Serial.print("PIN "); Serial.println(ii);
     Serial.println("   > ON");
     I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
 
@@ -90,9 +91,8 @@ void loop() {
   Serial.println("");
 
 
-  
-    for (int ii = 1; ii <= 8; ii++) {
-    Serial.print("PIN "); Serial.println(ii); 
+  for (ii = 1; ii <= 8; ii++) {
+    Serial.print("PIN "); Serial.println(ii);
     Serial.println("    > ON");
     I2C_PCF8574.digitalWrite(ii, PIN_STATUS_ON);
 

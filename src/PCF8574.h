@@ -40,46 +40,44 @@
 class PCF8574
 {
   private:
-    bool _BEING_WIRE = false;
-    int  _ADDRESS_I2C;
-	int  _ADDRESS_WIRE;
-	int  _PIN_INT = PCF8574_INT_PIN;
+    bool 	_BEING_WIRE = false;
+    int 	_ADDRESS_I2C;
+	int 	_ADDRESS_WIRE;
+	uint8_t _PIN_INT = PCF8574_INT_PIN;
 	
-	volatile int _PinMode;
+	volatile uint8_t _PinMode;
 	
-	bool PCF8574::IsPowerOfTwo (long x);
-    byte PCF8574::PotenciaDeDos(byte pin);
+    uint8_t PCF8574::PotenciaDeDos(byte pin);
 	
-	bool PCF8574::WireIsBegin();
-	void PCF8574::WireBegin();
-    byte PCF8574::WireReadValue();
-    void PCF8574::WireWriteValue(byte value);
+	bool 	PCF8574::WireIsBegin();
+	void 	PCF8574::WireBegin();
+    uint8_t PCF8574::WireReadValue();
+    void 	PCF8574::WireWriteValue(byte value);
 	
 
   public:
     PCF8574();
 	PCF8574(int Address_PCF8574);
 
-	void PCF8574::begin();
-	void PCF8574::begin(int Address_PCF8574);
+	void 	PCF8574::begin();
+	void 	PCF8574::begin(int Address_PCF8574);
 	
-	int  PCF8574::GetAddressWire();
-	void PCF8574::SetAddressWire(int Address_Wire);	
+	void 	PCF8574::pinMode(byte pin, byte mode);
+	uint8_t PCF8574::pinMode(byte pin);
+	bool 	PCF8574::digitalWrite(byte pin, byte newstatus);
+    uint8_t PCF8574::digitalRead(byte pin);
 	
-	void PCF8574::pinMode(int pin, int mode);
-	int  PCF8574::pinMode(int pin);
-	bool PCF8574::isPinValid(int pin);
+	int 	PCF8574::AddressWire();
+	void 	PCF8574::AddressWire(int Address_Wire);	
+	int 	PCF8574::AddressI2C();
+    void 	PCF8574::AddressI2C(int Address_PCF8574);
 	
-    void PCF8574::ResetPinStatus();
-    bool PCF8574::digitalWrite(byte pin, byte newstatus);
-    int  PCF8574::digitalRead(byte pin);
-    int  PCF8574::isStatusPin(byte pin, byte value);
+	bool 	PCF8574::isPinValid(byte pin);
+    void 	PCF8574::ResetPinStatus();
+    uint8_t PCF8574::isStatusPin(byte pin, byte value);
 	
-	int  PCF8574::GetAddress();
-    void PCF8574::SetAddress(int Address_PCF8574);
-	
-	void  PCF8574::DebugStatusPin(String &sreturn);
-	char* PCF8574::DebugStatusPin();
+	void  	PCF8574::DebugStatusPin(String &sreturn);
+	char* 	PCF8574::DebugStatusPin();
 };
 
 #endif

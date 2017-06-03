@@ -2,13 +2,12 @@ PCF8574		KEYWORD1
 
 begin		KEYWORD2
 
-GetAddressWire	KEYWORD2
-SetAddressWire	KEYWORD2
-
-
 pinMode		KEYWORD2
 digitalWrite	KEYWORD2
 digitalRead	KEYWORD2
+
+AddressWire	KEYWORD2
+AddressI2C	KEYWORD2
 
 
 ResetPinStatus 	KEYWORD2
@@ -16,8 +15,6 @@ isStatusPin	KEYWORD2
 
 DebugStatusPin	KEYWORD2
 
-GetAddress	KEYWORD2
-SetAddress	KEYWORD2
 
 PIN_STATUS_ON	LITERAL1
 PIN_STATUS_OFF	LITERAL1
