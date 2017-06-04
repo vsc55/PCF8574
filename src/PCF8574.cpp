@@ -65,29 +65,8 @@ void PCF8574::AddressI2C(int Address_PCF8574) {
 
 
 uint8_t PCF8574::PotenciaDeDos(byte pin) {
-  switch ( pin )
-  {
-    case 1:
-      return 1;
-    case 2:
-      return 2;
-	case 3:
-	  return 4;
-	case 4:
-	  return 8;
-	case 5:
-	  return 16;
-	case 6:
-	  return 32;
-	case 7:
-	  return 64;
-	case 8:
-	  return 128;
-	
-    default:
-      //le tenemos que sumar uno por que al pasar el float a int redondea a la baja.
-      return 0; //byte (pow (2, pin - 1)) + 1 ;
-  }
+  if (pin < 0) { return 0; }
+  return (1 << (pin - 1));
 }
 
 
