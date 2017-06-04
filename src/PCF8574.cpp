@@ -22,42 +22,43 @@
 
 
 PCF8574::PCF8574() {
-  this->_PinMode = 0;
-  
-  this->AddressI2C(PCF8574_ADDRESS_I2C);
-  this->AddressWire(PCF8574_ADDRESS_WIRE);
+  this->Init(PCF8574_ADDRESS_I2C);
 }
 PCF8574::PCF8574(int Address_PCF8574) {
+  this->Init(Address_PCF8574);
+}
+
+
+
+
+void 	PCF8574::Init(int Address_PCF8574) {
   this->_PinMode = 0;
-  
   this->AddressI2C(Address_PCF8574);
   this->AddressWire(PCF8574_ADDRESS_WIRE);
 }
-
-
-
-
-void PCF8574::begin() {
+void 	PCF8574::begin() {
 	this->WireBegin();
 }
-void PCF8574::begin(int Address_PCF8574) {
+void 	PCF8574::begin(int Address_PCF8574) {
 	this->AddressI2C(Address_PCF8574);
 	this->WireBegin();
 }
+bool 	PCF8574::isBegin() {
+	return this->_BEING_WIRE;
+}
 
 
 
-
-int PCF8574::AddressWire() {
+int  	PCF8574::AddressWire() {
   return this->_ADDRESS_WIRE;
 }
-void PCF8574::AddressWire(int Address_Wire) {
+void 	PCF8574::AddressWire(int Address_Wire) {
   this->_ADDRESS_WIRE = Address_Wire;
 }
-int PCF8574::AddressI2C() {
+int  	PCF8574::AddressI2C() {
   return this->_ADDRESS_I2C;
 }
-void PCF8574::AddressI2C(int Address_PCF8574) {
+void 	PCF8574::AddressI2C(int Address_PCF8574) {
   this->_ADDRESS_I2C = Address_PCF8574;
 }
 
@@ -72,12 +73,19 @@ uint8_t PCF8574::PotenciaDeDos(byte pin) {
 
 
 
-bool PCF8574::WireIsBegin() {
+bool 	PCF8574::WireIsBegin() {
 	if (TWCR == 0) { return false; }
 	else { return true; }
 }
-void PCF8574::WireBegin() {
+void 	PCF8574::WireBegin() {
   if (this->_BEING_WIRE == false) {
+	if (this->_PIN_INT >= 0) {
+	  //pinMode(this->_PIN_INT, INPUT_PULLUP);
+	  //attachInterrupt(this->_PIN_INT, pin_ISR, CHANGE);
+	  //https://www.arduino.cc/en/Reference/AttachInterrupt
+	  //https://www.allaboutcircuits.com/technical-articles/using-interrupts-on-arduino/
+	}
+	  
     if (this->WireIsBegin() == false)
 	{
 	  if (this->AddressWire() < 0 ) {
@@ -102,7 +110,7 @@ uint8_t PCF8574::WireReadValue() {
   }
   return value;
 }
-void PCF8574::WireWriteValue(byte value) {
+void 	PCF8574::WireWriteValue(byte value) {
   Wire.beginTransmission(AddressI2C());
   Wire.write(value);
   Wire.endTransmission();
@@ -111,13 +119,13 @@ void PCF8574::WireWriteValue(byte value) {
 
 
 
-bool PCF8574::isPinValid(byte pin) {
+bool 	PCF8574::isPinValid(byte pin) {
   if ((pin > PCF8574_MAX_PIN) || (pin < 0)) {
     return false;
   }
   return true;
 }
-void PCF8574::pinMode(byte pin, byte mode) {
+void 	PCF8574::pinMode(byte pin, byte mode) {
   if (this->isPinValid(pin) == true) {
     if (pin == 0) {
 	  for (byte i = 1; i <= PCF8574_MAX_PIN; i++) {
@@ -146,10 +154,9 @@ uint8_t PCF8574::pinMode(byte pin) {
 
 
 
-void PCF8574::ResetPinStatus() {
+void 	PCF8574::ResetPinStatus() {
   this->digitalWrite(0, false);
 }
-
 boolean PCF8574::digitalWrite(byte pin, byte newstatus) {
   if (this->isPinValid(pin) == false) {
     return false;
@@ -202,7 +209,6 @@ boolean PCF8574::digitalWrite(byte pin, byte newstatus) {
   this->WireWriteValue(value);		//ENVIA EL NUEVO CODIGO
   return true;
 }
-
 uint8_t PCF8574::digitalRead(byte pin) {
   if (this->isPinValid(pin) == false) {
     return PIN_STATUS_ERR;
@@ -214,7 +220,6 @@ uint8_t PCF8574::digitalRead(byte pin) {
     return PIN_STATUS_OFF;
   }
 }
-
 uint8_t PCF8574::isStatusPin(byte pin, byte value) {
   if (this->isPinValid(pin) == false) {
     return -1;

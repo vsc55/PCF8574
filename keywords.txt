@@ -1,6 +1,7 @@
 PCF8574		KEYWORD1
 
 begin		KEYWORD2
+isBegin		KEYWORD2
 
 pinMode		KEYWORD2
 digitalWrite	KEYWORD2

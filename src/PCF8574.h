@@ -46,6 +46,7 @@ class PCF8574
 	uint8_t _PIN_INT = PCF8574_INT_PIN;
 	
 	volatile uint8_t _PinMode;
+	volatile byte 	 _IntState = LOW;
 	
     uint8_t PCF8574::PotenciaDeDos(byte pin);
 	
@@ -54,6 +55,7 @@ class PCF8574
     uint8_t PCF8574::WireReadValue();
     void 	PCF8574::WireWriteValue(byte value);
 	
+	void 	PCF8574::Init(int Address_PCF8574);
 
   public:
     PCF8574();
@@ -61,6 +63,7 @@ class PCF8574
 
 	void 	PCF8574::begin();
 	void 	PCF8574::begin(int Address_PCF8574);
+	bool 	PCF8574::isBegin();
 	
 	void 	PCF8574::pinMode(byte pin, byte mode);
 	uint8_t PCF8574::pinMode(byte pin);
